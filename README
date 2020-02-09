@@ -1,0 +1,110 @@
+*------------------------------------------------------------------------------
+*                                 README
+*-----------------------------------------------------------------------------
+
+Thank you for downloading WRFPOST.tar as an additional form of postprocessing
+data from WRF derivative forecast models.  
+
+*------------------------------------------------------------------------------
+* Product Description
+*------------------------------------------------------------------------------
+
+This product was created mainly for the Advance Weather and Research (ARW) 
+Weather Research and Forecasting (WRF) model output. The files contained
+in this tar file have the GRIB 1 library and the codes to install and run
+this postprocessor.  
+
+In short, this postprocessor will convert data ouputed by the HRS forecast
+model which is in NetCDF format into GRIB 1 format.  The main variables it 
+converts are: pressure, u- and v- component wind, temperature, specific 
+humidity, sea-land mask, skin temperature, surface level pressure,
+geopotential, geopotential height, potential temperature, equivalent potential
+temperature, virtual temperature, vapor pressure, relative humidity, Dew point
+temperature, etc. 
+
+This ARW version plots out on a Lambert projection.  Further interpolation 
+schemes will be developed as more time becomes available, along with speeding 
+up the calculations as well as adding vorticity and divergence calculations.
+
+This tar file should contain:
+  /install.csh       --> installation of GRIB 1 Library and NetCDF2GRIB_V1.f 
+                         program
+  /NetCDF2GRIB_V1.f  --> NetCDF to GRIB 1 data converter code
+  /runme.csh         --> Will search for postd01_* files and run them through
+                         the converter code
+  /w3lib.tar         --> GRIB 1 Library which is provided by National Centers
+                         for Environmental Prediction
+  /Makefile          --> The Makefile for /w3lib/src files
+  /README            --> Instruction manual
+
+*------------------------------------------------------------------------------
+* Installing
+*------------------------------------------------------------------------------
+
+In order to install this program you need to know a couple of things:
+  * where your NetCDF library is located at 
+      -> NOTE: If you don't have this library, get your system administrator
+               to install the library for you.  We are using the version 3.6.1
+               of the NetCDF library.
+  * what is your FORTRAN90 compiler in your system
+  * where is your model output data going to
+
+1) Currently this package uses pgf90 compiler.  To compile it using some other 
+compiler you would need to change two files (install.csh, Makefile) and replace
+pgf90 with your own compiler.
+
+2) You would need to insert your NetCDF library path into the user defined 
+variable section of install.csh. For example:
+
+     > set LIBNETCDF = /usr/local/netcdf-3.6.1/lib/libnetcdf.a
+
+3) You should also list the entire path of the netcdf.inc file on line 67 in 
+Version 2 of this code.  This is usually found in the include directory of the 
+NetCDF code. For example:  
+
+     include '<path>/netcdf.inc'
+
+For Version 1 change line 63.
+
+4) Run the installation program.
+
+     > csh install.csh
+
+Congratulations, you have installed the WRF postprocessor.
+
+NOTE:   If you wish to install version one instead, you have to go into the 
+install.csh and change line 60 to V1 from V2 in the program names. You can also
+download version one from http://met.psu.edu/~mkh182/mkresearch.html for a 
+direct way to install version one.
+
+*------------------------------------------------------------------------------
+* How do I run it?
+*------------------------------------------------------------------------------
+
+In order to run this program you need to know:
+  * the location of your data 
+      -> NOTE: For HRD HRS systems, this code is defined similar to older post
+               processors, but you must enter in the STORM NAME, YEAR, MONTH, 
+               DAY, and HOUR in order for the data to be gribbed in the correct
+               /ATMOS file. If you are not in HRD, you must change this path 
+               many times.
+
+This program will create a directory, /GRIBfiles/, where all the gribbed data will go into.
+
+  To run this code:
+    if your from HRD and using thier systems:
+
+       > csh runme.csh NAME YEAR MONTH DAY HOUR
+
+    if your not, but still wish to use this system:
+
+       > csh runme.csh
+
+
+
+
+
+
+
+
+
